@@ -5,6 +5,7 @@
 
     <!--Content-->
     <LinearLayout
+
         android:background="@drawable/bg_login"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -37,6 +38,12 @@
 
         <!--Register-->
         <TextView
+            android:id="@+id/txtRegister"
+            android:clickable="true"
+            android:layout_marginTop="18sp"
+            android:textStyle="bold"
+            android:textSize="@dimen/b2"
+            android:textColor="@color/colorAccent"
             android:layout_gravity="center_horizontal"
             android:text="New Register"
             android:layout_width="wrap_content"
