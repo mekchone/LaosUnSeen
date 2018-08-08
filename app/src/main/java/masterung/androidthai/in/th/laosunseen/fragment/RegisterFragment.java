@@ -139,7 +139,7 @@ public class RegisterFragment extends Fragment {
     } // uploadPhoto
 
     private void findPathUrlPhoto() {
-
+//        Continouse 9Augv
     }
 
     @Override
