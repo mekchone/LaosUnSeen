@@ -21,35 +21,9 @@ public class serviceFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        Create Toolbar
-        createToolbar();
+
     }//Method Main
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_service,menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==R.id.itemSignOut) {
-            SignOut();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void SignOut() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
-        getActivity().finish();
-    }
-
-    private void createToolbar() {
-        Toolbar toolbar = getView().findViewById(R.id.toolbarService);
-        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
-    }
 
     @Nullable
     @Override

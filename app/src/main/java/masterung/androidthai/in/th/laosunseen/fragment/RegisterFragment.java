@@ -1,5 +1,6 @@
 package masterung.androidthai.in.th.laosunseen.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,6 +29,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,6 +41,7 @@ import java.util.ArrayList;
 import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
 import masterung.androidthai.in.th.laosunseen.utility.MyAlert;
+import masterung.androidthai.in.th.laosunseen.utility.UserModel;
 
 public class RegisterFragment extends Fragment {
 
@@ -49,6 +53,7 @@ public class RegisterFragment extends Fragment {
     private String emailString;
     private String passwordString;
     private String uidString, pathURLString, myPostString;
+    private ProgressDialog progressDialog;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -74,6 +79,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void UploadProcess() {
+
         EditText nameEditText = getView().findViewById(R.id.edtName);
         EditText emailEditText = getView().findViewById(R.id.edtEmail);
         EditText passwordEditText = getView().findViewById(R.id.edtPassword);
@@ -92,9 +98,16 @@ public class RegisterFragment extends Fragment {
             myAlert.normalDialog("Have Space","Please Fill All Every Blank");
         } else {
 //            No Space
+            //      start progressDailog for waiting
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Upload Value Process");
+            progressDialog.setMessage("Please wait few minus...");
+            progressDialog.show();
+
             CreateAuthentication();
             uploadPhotoToFirebase();
         }
+
     }
 
     private void CreateAuthentication() {
@@ -112,6 +125,7 @@ public class RegisterFragment extends Fragment {
                             myAlert.normalDialog("Cannot Rigister",
                                     "Because ==> " + task.getException().getMessage());
                             Log.d("8Agv1", "Error ==> " + task.getException().getMessage());
+                            progressDialog.dismiss(); // end Progress
                         }
                     }
                 });
@@ -130,15 +144,41 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(getActivity(), "Success Upload Photo", Toast.LENGTH_SHORT).show();
                 findPathUrlPhoto();
                 createPost();
+                createDatabase();
+                progressDialog.dismiss(); // end Progress
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getActivity(), "Cannot Upload Photo", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss(); // end Progress
             }
         });
 
     } // uploadPhoto
+
+    private void createDatabase() {
+        UserModel userModel = new UserModel(uidString, nameString, emailString, pathURLString, myPostString);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference()
+                .child("User");
+        databaseReference.child(uidString).setValue(userModel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "Register Success", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.contentMainFragment, new serviceFragment())
+                                .commit();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("9Aug1", "Error ==> " + e.toString());
+            }
+        });
+
+    }//create Database
 
     private void createPost() {
         ArrayList<String> stringArrayList = new ArrayList<>();

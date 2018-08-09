@@ -6,48 +6,51 @@
     <!--Content-->
     <LinearLayout
 
-        android:background="@drawable/bg_login"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_login"
+        android:orientation="vertical">
 
 
         <!--User-->
         <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/textfield_email"
             android:hint="Email :"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="textEmailAddress" />
 
         <!--Password-->
         <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/textfield_password"
             android:hint="Password :"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:inputType="textPassword" />
 
         <!--Login-->
         <Button
-            android:background="@drawable/bg_button"
-            android:text="Login"
+            android:id="@+id/bgLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button"
+            android:text="Login" />
 
         <!--Register-->
         <TextView
             android:id="@+id/txtRegister"
-            android:clickable="true"
-            android:layout_marginTop="18sp"
-            android:textStyle="bold"
-            android:textSize="@dimen/b2"
-            android:textColor="@color/colorAccent"
-            android:layout_gravity="center_horizontal"
-            android:text="New Register"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18sp"
+            android:clickable="true"
+            android:text="New Register"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/b2"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
