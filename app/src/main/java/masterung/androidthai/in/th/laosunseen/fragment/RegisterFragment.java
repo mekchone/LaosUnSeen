@@ -32,6 +32,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
 import masterung.androidthai.in.th.laosunseen.utility.MyAlert;
@@ -126,6 +129,7 @@ public class RegisterFragment extends Fragment {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(getActivity(), "Success Upload Photo", Toast.LENGTH_SHORT).show();
                 findPathUrlPhoto();
+                createPost();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -134,12 +138,43 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-
-
     } // uploadPhoto
+
+    private void createPost() {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        stringArrayList.add("Hello");
+        myPostString = stringArrayList.toString();
+        Log.d("9Aug1", "myPost ==> " + myPostString);
+    }
 
     private void findPathUrlPhoto() {
 //        Continouse 9Augv
+        try {
+
+            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+            StorageReference storageReference = firebaseStorage.getReference();
+            final String[] urlStrings = new String[1];
+
+            storageReference.child("Avata").child(nameString)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            urlStrings[0] = uri.toString();
+                            pathURLString = urlStrings[0];
+                            Log.d("9Aug1", "pathUrl ==> " + pathURLString);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("9Aug1", "Error ==> " + e.toString());
+                }
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -152,7 +187,7 @@ public class RegisterFragment extends Fragment {
             aBoolean = false;
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
-                Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 150, 100, true);
+                Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap, 400, 300, true);
                 imageView.setImageBitmap(bitmap1);
 
             } catch (Exception e) {
